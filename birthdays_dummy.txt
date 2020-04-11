@@ -1,0 +1,14 @@
+#mine #all are dummy
+2051-07-14 BS:MINE
+
+#Family members
+1998-12-36 AD:Brother
+2029-9-20 BS:Mom
+
+
+#Friends
+2052-1-9 BS:Friend 1
+1990-4-11 AD:GF
+2053-7-2 BS:Friend 2
+2051-1-04 BS:Friend 3
+2057-11-12 BS:Friend 4
