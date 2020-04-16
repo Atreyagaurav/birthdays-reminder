@@ -1,0 +1,24 @@
+* Birthdays Reminder
+
+** About
+This program simply scans a file with birthdays informations and then displays the list with number before the next birthday.
+
+compile with gcc, then use -h option for help.
+
+#+BEGIN_SRC sh
+./birthdays -h
+#+END_SRC
+
+#+RESULTS:
+| Birthday | reminders | for  | Constant | display   |      |       |             |
+| Options: |           |      |          |           |      |       |             |
+|          | -u        | val  | upper    | limit     | of   | days, | val=(0-366) |
+|          | -l        | val  | lower    | limit     | of   | days, | val=(0-366) |
+|          | -t        | Show | today's  | birthdays | only |       |             |
+|          | -d        | Show | today's  | date      | in   | BS    |             |
+
+
+** Aknowledgement
+The BS and AD conversion codes are copied and slightly modified from the [[https://github.com/bpanthi977/calendar][Bipul Panthi's Repository]]. Without it, I'd not have been able to support the BS date format. 
+
+As for the idea, I nearly forgot the birthday of my friend, so some credit goes to him. 
