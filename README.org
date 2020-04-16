@@ -1,24 +1,117 @@
 * Birthdays Reminder
-
+  
 ** About
 This program simply scans a file with birthdays informations and then displays the list with number before the next birthday.
 
 compile with gcc, then use -h option for help.
 
-#+BEGIN_SRC sh :exports both
+#+BEGIN_SRC sh :exports both :results output
+gcc bdays.c -o birthdays
 ./birthdays -h
 #+END_SRC
 
 #+RESULTS:
-| Birthday | reminders | for  | Constant | display   |      |       |             |
-| Options: |           |      |          |           |      |       |             |
-|          | -u        | val  | upper    | limit     | of   | days, | val=(0-366) |
-|          | -l        | val  | lower    | limit     | of   | days, | val=(0-366) |
-|          | -t        | Show | today's  | birthdays | only |       |             |
-|          | -d        | Show | today's  | date      | in   | BS    |             |
+: Birthday reminders for Constant display
+: Options:
+: 	-u val	 upper limit of days, val=(0-366)
+: 	-l val	 lower limit of days, val=(0-366)
+: 	-t	 Show today's birthdays only
+: 	-d	 Show today's date in BS
+
+** Uses 
+*** Single time executable
+The default program is one time executable, you can run the code to get the list of the birthdays listed in the birthdays.txt file. 
+(Filename specified in the program itself).
+
+#+BEGIN_SRC sh :exports both :results output
+./birthdays 
+#+END_SRC
+
+#+RESULTS:
+: ---TODAY---	Friend 3     (01-04 BS)
+: in   5 days	Friend 1     (01-09 BS)
+: in 185 days	Friend 2     (07-02 BS)
+: in 197 days	MINE         (07-14 BS)
+: in 234 days	Brother      (12-06 AD)
+: in 263 days	Mom          (09-20 BS)
+: in 314 days	Friend 4     (11-12 BS)
+: in 360 days	GF           (04-11 AD)
+
+As specified in the [[about][About]] Block, you can display only todays' or put a limit. For example, display this week's birthdays and put it in .bashrc so you can not miss it. 
+#+BEGIN_SRC sh :exports both :results output
+./birthdays -u 7
+#+END_SRC
+
+#+RESULTS:
+: ---TODAY---	Friend 3     (01-04 BS)
+: in   5 days	Friend 1     (01-09 BS)
+
+*** Conky display wizard
+[[https://github.com/brndnmtthws/conky][Conky]] is a desktop monitor tool. It is excellent tool which can be informative and aesthetic at a sametime.
+I pesonally like it very much and have made this program primarily for this.
+My config for conky file contains following text part to display the birthdays in my desktop.
+
+#+BEGIN_SRC conky
+conky.text = [
+${color e43526}BIRTHDAYS:$color
+${color 00ff00}${execi 100000 ~/kool/Programming/C/birthdays/birthdays -t}$color
+${color ffff00}${execi 100000 ~/kool/Programming/C/birthdays/birthdays -l 1 -u 7}$color
+${color ffffff}${execi 100000 ~/kool/Programming/C/birthdays/birthdays -l 8 -u 30}$color
+]
+#+END_SRC
+This displays the today's birthdays in green, this week's in yellow and this month's in white.
+The birthdays are displayed in ascending order.
+You can't miss a birthday as you'll be seeing it for a month in advance.
+
+*** Date conversion tool
+The functions inside this code can be used as date conversion tools, in C you can just use the functions. 
+If you make a shared library, you can then use it from python. The .so file can be made like this.
+#+BEGIN_SRC sh
+gcc -shared -o libbdays.so -fPIC bdays.c
+#+END_SRC
+
+#+RESULTS:
+
+then you can load that file in python from ctypes. You have to go some extra
+length to make structure data type as used by the c code, so I'm planning to do 
+this in my spare time. But it is definitely useful. 
+#+BEGIN_SRC python :exports both :results output
+import ctypes
+AD = 0
+BS = 1
+
+dl = ctypes.cdll.LoadLibrary("./libbdays.so")
+
+class Date(ctypes.Structure):
+    _fields_ = [
+        ("year", ctypes.c_int),
+        ("month", ctypes.c_int),
+        ("day", ctypes.c_int),
+        ("type",ctypes.c_int)
+    ]
+
+    def __repr__(self):
+        return f'{self.year}-{self.month:02d}-{self.day:02d} ' + ('BS' if self.type else 'AD')
+
+d = Date(1997,10,20,AD)
+dl.convertADBS.restype = Date
+conv = dl.convertADBS(ctypes.byref(d),BS)
+print("Converted: ",conv)
+#You can also get current dat
+dl.getCurrentDate.restype = Date
+print("Today: ",dl.getCurrentDate())
+td = dl.getCurrentDate()
+print("Today: ",dl.convertADBS(ctypes.byref(td),BS))
+#+END_SRC
+
+#+RESULTS:
+: Converted:  2054-07-04 BS
+: Today:  2020-04-16 AD
+: Today:  2077-01-04 BS
 
 
 ** Aknowledgement
-The BS and AD conversion codes are copied and slightly modified from the [[https://github.com/bpanthi977/calendar][Bipul Panthi's Repository]]. Without it, I'd not have been able to support the BS date format. 
+The BS and AD conversion codes are copied and slightly modified from the [[https://github.com/bpanthi977/calendar][Bipul Panthi's Repository]].
+Without it, I'd not have been able to support the BS date format. 
 
 As for the idea, I nearly forgot the birthday of my friend, so some credit goes to him. 
