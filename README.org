@@ -5,7 +5,7 @@ This program simply scans a file with birthdays informations and then displays t
 
 compile with gcc, then use -h option for help.
 
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :exports both
 ./birthdays -h
 #+END_SRC
 
