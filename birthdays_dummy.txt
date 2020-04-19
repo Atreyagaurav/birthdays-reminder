@@ -2,7 +2,7 @@
 2051-07-14 BS:MINE
 
 #Family members
-1998-12-36 AD:Brother
+1998-12-6 AD:Brother
 2029-9-20 BS:Mom
 
 
