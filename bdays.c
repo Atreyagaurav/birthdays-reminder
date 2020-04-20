@@ -6,7 +6,7 @@
 
 #include "convertADBS.h"
 
-#define BIRTHDAYS_FILE "birthdays_dummy.txt"
+#define BIRTHDAYS_FILE "/home/gaurav/kool/Programming/C/birthdays/birthdays.txt"
 #define COMMENT_CHAR '#'
 
 typedef struct{
@@ -136,18 +136,18 @@ int daysTillNextBDay(Date bday){
   return diff;
 }
 
-Person* insertPerson(Person* p, Person pin, int num){
-  p = realloc(p,(num+1)*sizeof(Person));
+Person** insertPerson(Person** p, Person pin, int num){
+  *p = realloc(*p,(num+1)*sizeof(Person));
   int i;
   for (i=0;i<num;i++){
-    if ((p+i)->days > pin.days){
+    if ((*p+i)->days > pin.days){
       break;
     }
   }
   for(;num>i;num--){
-    *(p+num) = *(p+num-1);
+    *(*p+num) = *(*p+num-1);
   }
-  *(p+i)=pin;
+  *(*p+i)=pin;
   return p;
 }
 
@@ -176,7 +176,7 @@ Person* readFromFile(char* filename, int* num, int low, int high){
     if ((ptemp.days < low) || (ptemp.days >high)){
       continue;
     }
-    p = insertPerson(p, ptemp, n);
+    insertPerson(&p, ptemp, n);
     n++;
   }
   fclose(fp);
