@@ -6,7 +6,7 @@
 
 #include "convertADBS.h"
 
-#define BIRTHDAYS_FILE "/home/gaurav/kool/Programming/C/birthdays/birthdays.txt"
+#define BIRTHDAYS_FILE "birthdays_dummy.txt"
 #define COMMENT_CHAR '#'
 
 typedef struct{
@@ -52,6 +52,7 @@ int nextLine(FILE* fp){
     case EOF:
       return 0;
     case '\n':
+    case '\r':
     case ' ':
       continue;
     case COMMENT_CHAR:
@@ -155,6 +156,7 @@ Person* readFromFile(char* filename, int* num, int low, int high){
   FILE *fp;
   Date d;
   Person* p;
+  p = NULL;
   Person ptemp;
   int n = 0;
   char name[PERSON_NAME_LENGTH];
