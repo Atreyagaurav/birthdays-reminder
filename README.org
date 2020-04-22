@@ -141,7 +141,7 @@ print("Today: ",dl.convertADBS(ctypes.byref(td),BS))
 
 
 ** Aknowledgement
-The BS and AD conversion codes are copied and slightly modified from the [[https://github.com/bpanthi977/calendar][Bipul Panthi's Repository]].
+The BS and AD conversion codes are copied and slightly modified from the [[https://github.com/bpanthi977/calendar][Bibek Panthi's Repository]].
 Without it, I'd not have been able to support the BS date format. 
 
 As for the idea, I nearly forgot the birthday of my friend, so some credit goes to him. 

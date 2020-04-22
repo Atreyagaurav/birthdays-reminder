@@ -8,6 +8,7 @@
 
 #define BIRTHDAYS_FILE "birthdays_dummy.txt"
 #define COMMENT_CHAR '#'
+#define DEFAULT_YEAR getCurrentDate().year
 
 typedef struct{
   int days;
@@ -69,13 +70,27 @@ int nextLine(FILE* fp){
 
 Date readSingleDate(FILE* fp,char* name){
   Date d;
+  int i;
   int flag = 0;
   char c = ' ';
+  char year[5];
   if (nextLine(fp)==0){
     d.year =  0;
     return d;
   }
-  fscanf(fp,"%d-%d-%d",&d.year,&d.month,&d.day);
+  for(i=0;i<4;i++){
+    year[i] = fgetc(fp);
+    if (year[i]=='X'){
+    d.year = DEFAULT_YEAR;
+    break;
+    }
+  }
+  if (i==4){
+    year[4]='\0';
+    d.year = atoi(year);
+  }
+  while(fgetc(fp)!='-');
+  fscanf(fp,"%d-%d",&d.month,&d.day);
   while(c!=':'){
     c=fgetc(fp);
     switch (c){
@@ -213,11 +228,11 @@ int main(int argc, char **argv){
       break;
     case 'h':
     default:
-      printf("Birthday reminders for Constant display\nOptions:\n");
-      printf("\t-u val\t upper limit of days, val=(0-366)\n");
-      printf("\t-l val\t lower limit of days, val=(0-366)\n");
-      printf("\t-t\t Show today's birthdays only\n");
-      printf("\t-d\t Show today's date in BS\n");
+      printf("Birthday reminders for Constant display\nOptions:\n"
+	     "\t-u val\t upper limit of days, val=(0-366)\n"
+	     "\t-l val\t lower limit of days, val=(0-366)\n"
+	     "\t-t\t Show today's birthdays only\n"
+	     "\t-d\t Show today's date in BS\n");
       return 0;
     }
   }
@@ -229,7 +244,6 @@ int main(int argc, char **argv){
   for(i=0;i<num;i++){
     printPerson(p+i);
   }
-  /* printf("%s-%d",__FILE__,__LINE__); */
   return 0;
 }
 
