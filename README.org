@@ -4,10 +4,12 @@
 This program simply scans a file with birthdays informations and then displays the list with number before the next birthday.
 
 compile with gcc, then use -h option for help.
-just use the Makefile to compile the files.
+
+OR just use the Makefile to compile the files.
 
 #+BEGIN_SRC sh :exports both :results output
 make
+#OR the following line
 #gcc -o birthdays bdays.c convertADBS.c
 ./birthdays -h
 #+END_SRC
@@ -26,7 +28,8 @@ make
 ** Uses 
 *** Single time executable
 The default program is one time executable, you can run the code to get the list of the birthdays listed in the birthdays.txt file. 
-(Filename specified in the program itself).
+(Filename specified in the program itself). 
+You can skip the year with character X, like X-1-2 instead of 1990-1-2 if you don't know or want to store the year.
 
 #+BEGIN_SRC sh :exports both :results output
 ./birthdays 

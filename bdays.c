@@ -41,7 +41,7 @@ void skipWhiteSpace(FILE* fp){
       break;
     }
   }
-  fseek(fp, -1, SEEK_CUR);
+  ungetc(c, fp);
 }
 
 int nextLine(FILE* fp){
@@ -60,10 +60,10 @@ int nextLine(FILE* fp){
       skipThisLine(fp);
       break;
     default:
+      ungetc(c, fp);
       flag=0;
     }
   }
-  fseek(fp, -1, SEEK_CUR);
   return 1;
 }
 
