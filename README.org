@@ -5,7 +5,7 @@ This program simply scans a file with birthdays informations and then displays t
 
 compile with gcc, then use -h option for help.
 
-OR just use the Makefile to compile the files.
+OR just use the Makefile to compile the files. 
 
 #+BEGIN_SRC sh :exports both :results output
 make
@@ -23,7 +23,8 @@ make
 : 	-t	 Show today's birthdays only
 : 	-d	 Show today's date in BS
 
-
+Change the DEBUG value to 1 inside the bdays.c if you want to compile with the debug option.
+It'll print out the inner mechanism while running.
 
 ** Uses 
 *** Single time executable
