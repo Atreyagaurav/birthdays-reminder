@@ -46,7 +46,7 @@ You can skip the year with character X, like X-1-2 instead of 1990-1-2 if you do
 : in 314 days	Friend 4     (11-12 BS)
 : in 360 days	GF           (04-11 AD)
 
-As specified in the [[about][About]] Block, you can display only todays' or put a limit. For example, display this week's birthdays and put it in .bashrc so you can not miss it. 
+As specified in the About Block, you can display only todays' or put a limit. For example, display this week's birthdays and put it in .bashrc so you can not miss it. 
 #+BEGIN_SRC sh :exports both :results output
 ./birthdays -u 7
 #+END_SRC

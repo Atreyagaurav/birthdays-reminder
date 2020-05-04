@@ -11,11 +11,11 @@
 #define DEFAULT_YEAR getCurrentDate().year
 #define DEBUG 0
 #define Err_msg(message)                                                       \
-  printf("[%s] L:%d FUN:%s ->%s", __FILE__, __LINE__, __FUNCTION__, message)
+  printf("[%s] L:%d FUN:%s ERROR %s", __FILE__, __LINE__, __FUNCTION__, message)
 #define Debug_msg(message)                                                     \
   ({                                                                           \
     if (DEBUG) {                                                               \
-      printf("[%s] L:%d FUN:%s ->%s", __FILE__, __LINE__, __FUNCTION__,        \
+      printf("[%s] L:%d FUN:%s DEBUG %s", __FILE__, __LINE__, __FUNCTION__,        \
              message);                                                         \
     }                                                                          \
   })
@@ -29,12 +29,12 @@ typedef struct{
 } Person;
 
 void printPerson(Person *p){
-  if (p->days ==0){
-    printf("---TODAY---");
+  if (p->days == 0){
+    printf(" -TODAY-");
   }else{
-    printf("in %3d days",p->days);
+    printf("%3d days",p->days);
   }
-  printf("\t%-12s (",p->name);
+  printf(" %-18s (",p->name);
   printDate(&p->birthDate,0);
   printf(")\n");
 }
@@ -145,7 +145,11 @@ Date readSingleDate(FILE* fp,char* name){
       *(name+flag) = c;
       flag++;
     }
-    *(name+flag-1) = '\0';
+    flag-=2;
+    while(*(name+flag)==' ' || *(name+flag)=='\t'){
+      flag--;
+    }
+    *(name+flag+1) = '\0';
     DEBUG_BLK(printf("Entry Read:");printDate(&d, 1);printf("\tNAME: %s\n",name););
   }else{
     DEBUG_BLK(printf("Entry Read:");printDate(&d, 1);printf("\tName Not read\n"););
@@ -281,6 +285,8 @@ int main(int argc, char **argv){
   for(i=0;i<num;i++){
     printPerson(p+i);
   }
+  Debug_msg("Freeing memory\n");
+  free(p);
   Debug_msg("Exiting program\n");
   return 0;
 }
