@@ -7,10 +7,10 @@
 
 
 #Friends
-2052-1-9 BS:	Friend 1
+2052-1-29 BS:	Friend 1               
 X-4-11 AD: 	Someone 1
 XXXX-4-22 AD:	Someone 2
-X090-4-23 AD:	Someone 3
+X090-5-6 AD:	Someone 3
 2053-7-2 BS:	Friend 2
 2051-1-04 BS:	Friend 3
 2057-11-12 BS:	Friend 4

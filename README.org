@@ -1,21 +1,31 @@
 * Birthdays Reminder
   
 ** About
-This program simply scans a file with birthdays informations and then displays the list with number before the next birthday.
+This program simply scans a file with birthdays informations and then displays 
+the list with number before the next birthday.
 
-compile with gcc, then use -h option for help.
+** Compilation
+You can just use the Makefile to compile the files if you are on Linux. 
+Or you can use the gcc command. 
 
-OR just use the Makefile to compile the files. 
-
-#+BEGIN_SRC sh :exports both :results output
-make
-#OR the following line
-#gcc -o birthdays bdays.c convertADBS.c
-./birthdays -h
+Any of the following two is fine.
+#+BEGIN_SRC sh 
+  make
 #+END_SRC
 
-#+RESULTS:
-: make: 'birthdays' is up to date.
+#+BEGIN_SRC sh
+  gcc -o birthdays bdays.c convertADBS.c
+#+END_SRC
+
+** Command Line Arguments 
+The available command line arguments can be seen using -h flag. 
+#+name: help
+#+BEGIN_SRC sh :exports both :results output
+  ./birthdays -h
+#+END_SRC
+
+The output should show compilation details if needed:
+#+RESULTS: help
 : Birthday reminders for Constant display
 : Options:
 : 	-u val	 upper limit of days, val=(0-366)
@@ -26,34 +36,85 @@ make
 Change the DEBUG value to 1 inside the bdays.c if you want to compile with the debug option.
 It'll print out the inner mechanism while running.
 
+** Input
+The input file is the birthdays file which has information in txt. 
+Here the bdays.c has BIRTHDAYS_FILE defined which is used to read the birthdays,
+you can change the file in the code.
+
+Right now the birthdays_dummy.txt has following data:
+#+BEGIN_SRC sh :exports results :results output verbatim 
+cat birthdays_dummy.txt
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+#mine #all are dummy
+2051-07-14 BS:MINE
+
+#Family members
+1998-12-6 AD:Brother
+2029-9-20 BS:Mom
+
+
+#Friends
+2052-1-29 BS:	Friend 1               
+X-4-11 AD: 	Someone 1
+XXXX-4-22 AD:	Someone 2
+X090-5-6 AD:	Someone 3
+2053-7-2 BS:	Friend 2
+2051-1-04 BS:	Friend 3
+2057-11-12 BS:	Friend 4
+#+end_example
+As you can see, you can input the data in variety of ways. Both AD and BS are supported.
+BS ones are assumed to celebrate on BS birthday and same for AD.
+You can skip the year with character X, like X-1-2 instead of 1990-1-2 if you don't know or want to store the year.
 ** Uses 
 *** Single time executable
 The default program is one time executable, you can run the code to get the list of the birthdays listed in the birthdays.txt file. 
 (Filename specified in the program itself). 
-You can skip the year with character X, like X-1-2 instead of 1990-1-2 if you don't know or want to store the year.
 
+
+#+name: single-line
 #+BEGIN_SRC sh :exports both :results output
 ./birthdays 
 #+END_SRC
 
-#+RESULTS:
-: ---TODAY---	Friend 3     (01-04 BS)
-: in   5 days	Friend 1     (01-09 BS)
-: in 185 days	Friend 2     (07-02 BS)
-: in 197 days	MINE         (07-14 BS)
-: in 234 days	Brother      (12-06 AD)
-: in 263 days	Mom          (09-20 BS)
-: in 314 days	Friend 4     (11-12 BS)
-: in 360 days	GF           (04-11 AD)
+The output varies daily, but it can be like followings.
+#+RESULTS: single-line
+#+begin_example
+ -TODAY- Someone 3          (05-06 AD)
+  5 days Friend 1           (01-29 BS)
+165 days Friend 2           (07-02 BS)
+177 days MINE               (07-14 BS)
+214 days Brother            (12-06 AD)
+243 days Mom                (09-20 BS)
+294 days Friend 4           (11-12 BS)
+340 days Someone 1          (04-11 AD)
+346 days Friend 3           (01-04 BS)
+351 days Someone 2          (04-22 AD)
+#+end_example
 
 As specified in the About Block, you can display only todays' or put a limit. For example, display this week's birthdays and put it in .bashrc so you can not miss it. 
+#+name: limited
 #+BEGIN_SRC sh :exports both :results output
 ./birthdays -u 7
 #+END_SRC
+It will only show the birthdays in that limit. default upper limit is 366 days and lower is 0.
+Which means the limit are inclusive. 
+#+RESULTS: limited
+:  -TODAY- Someone 3          (05-06 AD)
+:   5 days Friend 1           (01-29 BS)
 
-#+RESULTS:
-: ---TODAY---	Friend 3     (01-04 BS)
-: in   5 days	Friend 1     (01-09 BS)
+You can just use the option -t if you want today's birthdays only. 
+#+name: today
+#+BEGIN_SRC sh :exports both :results output
+./birthdays -t
+#+END_SRC
+It will only show the birthdays in that limit. default upper limit is 366 days and lower is 0.
+Which means the limit are inclusive. 
+#+RESULTS: today
+:  -TODAY- Someone 3          (05-06 AD)
+This can be set in .bashrc or .bashprofile so you'll never miss.
 
 *** Conky display wizard
 [[https://github.com/brndnmtthws/conky][Conky]] is a desktop monitor tool. It is excellent tool which can be informative and aesthetic at a sametime.
@@ -75,7 +136,7 @@ You can't miss a birthday as you'll be seeing it for a month in advance.
 *** Date conversion tool
 The functions inside this code can be used as date conversion tools, in C you can just use the functions. 
 If you make a shared library, you can then use it from python. The .so file can be made like this.
-#+BEGIN_SRC sh :tangle lib
+#+BEGIN_SRC sh :tangle yes
 gcc -shared -o libbdays.so -fPIC convertADBS.c
 #+END_SRC
 
@@ -88,44 +149,39 @@ this in my spare time. But it is definitely useful.
 The syntax for loading the shared library is follows:
 
 #+name: ctypes-imports
-#+begin_src python
+#+begin_src python :session lib :tangle yes
 import ctypes
 
 dl = ctypes.cdll.LoadLibrary("./libbdays.so")
 #+end_src
 
-#+RESULTS:
-: None
+#+RESULTS: ctypes-imports
+
 
 Then make a Date class like the one from C, we can use this as the datatype to use in functions.
 
 #+name: class-def
-#+BEGIN_SRC python
+#+BEGIN_SRC python :session lib :tangle yes :results output
 
-AD = 0
-BS = 1
-class Date(ctypes.Structure):
-    _fields_ = [
-        ("year", ctypes.c_int),
-        ("month", ctypes.c_int),
-        ("day", ctypes.c_int),
-        ("type",ctypes.c_int)
-    ]
+  AD = 0
+  BS = 1
+  class Date(ctypes.Structure):
+      _fields_ = [
+	  ("year", ctypes.c_int),
+	  ("month", ctypes.c_int),
+	  ("day", ctypes.c_int),
+	  ("type",ctypes.c_int)
+      ]
+      def __repr__(self):
+	  return f'{self.year}-{self.month:02d}-{self.day:02d} ' + ('BS' if self.type else 'AD')
 
-    def __repr__(self):
-        return f'{self.year}-{self.month:02d}-{self.day:02d} ' + ('BS' if self.type else 'AD')
 #+end_src
 
-#+RESULTS:
+#+RESULTS: class-def
 
-
-
-
-#+begin_src python :exports both :results output :tangle yes :noweb yes
-<<ctypes-imports>>
-
-<<class-def>>
-
+Now you can use that Date class to construct the date, and convert it.
+#+name: conversion
+#+begin_src python :exports both :results output :tangle yes :session lib
 
 d = Date(1997,10,20,AD)
 dl.convertADBS.restype = Date
@@ -133,15 +189,16 @@ conv = dl.convertADBS(ctypes.byref(d),BS)
 print("Converted: ",conv)
 #You can also get current dat
 dl.getCurrentDate.restype = Date
-print("Today: ",dl.getCurrentDate())
 td = dl.getCurrentDate()
+print("Today: ",td)
 print("Today: ",dl.convertADBS(ctypes.byref(td),BS))
 #+end_src
 
-#+RESULTS:
+#+RESULTS: conversion
 : Converted:  2054-07-04 BS
-: Today:  2020-04-19 AD
-: Today:  2077-01-07 BS
+: Today:  2020-05-06 AD
+: Today:  2077-01-24 BS
+
 
 
 ** Aknowledgement
