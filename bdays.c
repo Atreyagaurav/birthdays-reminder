@@ -6,7 +6,11 @@
 
 #include "convertADBS.h"
 
+
+#ifndef BIRTHDAYS_FILE
 #define BIRTHDAYS_FILE "birthdays_dummy.txt"
+#endif
+
 #define COMMENT_CHAR '#'
 #define DEFAULT_YEAR getCurrentDate().year
 #define DEBUG 0
