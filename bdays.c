@@ -43,6 +43,17 @@ void printPerson(Person *p){
   printf(")\n");
 }
 
+void printRemindLine(Person *p){
+  Date bdate;
+  Date today = getCurrentDate();
+  int days = daysSinceADEpoch(&today) + p->days;
+  bdate = nthDayOfADEpoch(days);
+
+  printf("REM ");
+  printf("%d/%d/%d", bdate.year, bdate.month, bdate.day);
+  printf(" MSG %s\n", p->name);
+}
+
 
 void skipThisLine(FILE* fp){
   while(fgetc(fp)!='\n');
@@ -238,13 +249,14 @@ Person* readFromFile(char* filename, int* num, int low, int high){
 int main(int argc, char **argv){
   Debug_msg("Starting Program\n");
   Person *p;
-  int num,opt,limit_high,limit_low;
+  int num,opt,limit_high,limit_low, remind_fmt;
   limit_high = 366;
   limit_low = 0;
+  remind_fmt = 0;
   Date d;
   
   Debug_msg("Starting parsing commandline arguments\n");
-  while((opt = getopt(argc,argv,":u:l:thd")) != -1){
+  while((opt = getopt(argc,argv,":u:l:thdr")) != -1){
     switch (opt){
     case 'd':
       DEBUG_BLK(printf("OPTION Current Date:\n"););
@@ -265,6 +277,10 @@ int main(int argc, char **argv){
       limit_high = 0;
       DEBUG_BLK(printf("OPTION Today's birthdays only\n"););
       break;
+    case 'r':
+      remind_fmt = 1;
+      DEBUG_BLK(printf("OPTION Remind Formatted Output\n"););
+      break;
     case 'h':
       Debug_msg("OPTION Help\n");
     default:
@@ -275,7 +291,8 @@ int main(int argc, char **argv){
 	     "\t-u val\t upper limit of days, val=(0-366)\n"
 	     "\t-l val\t lower limit of days, val=(0-366)\n"
 	     "\t-t\t Show today's birthdays only\n"
-	     "\t-d\t Show today's date in BS\n");
+	     "\t-d\t Show today's date in BS\n"
+	     "\t-r\t Print in remind file format.\n");
       return 0;
     }
   }
@@ -286,8 +303,10 @@ int main(int argc, char **argv){
   p = readFromFile(BIRTHDAYS_FILE, &num, limit_low, limit_high);
   Debug_msg("Printing the birthdays in given limits\n");
   int i;
-  for(i=0;i<num;i++){
-    printPerson(p+i);
+  if (remind_fmt){
+    for(i=0;i<num;i++) printRemindLine(p+i);
+  }else{
+     for(i=0;i<num;i++) printPerson(p+i);
   }
   Debug_msg("Freeing memory\n");
   free(p);
