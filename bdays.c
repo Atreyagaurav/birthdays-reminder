@@ -51,7 +51,7 @@ void printRemindLine(Person *p){
 
   printf("REM ");
   printf("%d/%d/%d", bdate.year, bdate.month, bdate.day);
-  printf(" MSG %s\n", p->name);
+  printf(" TAG birthday MSG %s\n", p->name);
 }
 
 

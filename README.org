@@ -13,6 +13,8 @@ Any of the following two is fine.
   make
 #+END_SRC
 
+#+RESULTS:
+
 #+BEGIN_SRC sh
   gcc -o birthdays bdays.c convertADBS.c
 #+END_SRC
@@ -32,6 +34,7 @@ The output should show compilation details if needed:
 : 	-l val	 lower limit of days, val=(0-366)
 : 	-t	 Show today's birthdays only
 : 	-d	 Show today's date in BS
+: 	-r	 Print in remind file format.
 
 Change the DEBUG value to 1 inside the bdays.c if you want to compile with the debug option.
 It'll print out the inner mechanism while running.
@@ -133,7 +136,7 @@ This displays the today's birthdays in green, this week's in yellow and this mon
 The birthdays are displayed in ascending order.
 You can't miss a birthday as you'll be seeing it for a month in advance.
 
-*** Date conversion tool
+*** Date conversion tool for Python
 The functions inside this code can be used as date conversion tools, in C you can just use the functions. 
 If you make a shared library, you can then use it from python. The .so file can be made like this.
 #+BEGIN_SRC sh :tangle yes
@@ -199,6 +202,34 @@ print("Today: ",dl.convertADBS(ctypes.byref(td),BS))
 : Today:  2020-05-06 AD
 : Today:  2077-01-24 BS
 
+*** Date conversion CLI
+The program ~convert~ can convert between the dates in the CLI itself. Although it has limited functionality than the overall shared library would have. You can just pass the date in ~YYYY/mm/dd~ format with ~A~ for ~AD~ and ~B~ for ~BS~ and it'll convert it to other.
+
+Here is the usage instructions.
+#+begin_src bash :results output
+./convert
+#+end_src
+
+#+RESULTS[69f14a4dff7461671d5b113957b70d1ebfcbb209]:
+: Usage: ./convert YYYY-MM-DD {A|B}
+: 
+: YYYY-MM-DD is date in that format.
+: {A|B} AD or BS, automatically assumes conversion to another.
+: 
+: Pass - as argument if you want current date in BS.
+
+So basically:
+#+begin_src bash :results output
+./convert 2022-5-8 AD
+#+end_src
+
+#+RESULTS[c4a15c393e683f9632922f55b0452c956c317229]:
+: 2079-01-25 BS
+
+*** Remind Input file
+[[https://dianne.skoll.ca/projects/remind/][Remind]] is a program to manage your reminders, it has a really sophisticated syntax that I like. You can generate remind input files from birthdays that you have. Know that it'll only generate the file for entries that you have for one year in advance. so if the events are already happened this year it'll generate the entries for next year.
+
+Just use ~-r~ flag in the program and you'll get a remind input formatted output, you can redirect that to any file and pass that to remind.
 
 
 ** Aknowledgement

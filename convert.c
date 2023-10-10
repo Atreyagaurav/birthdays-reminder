@@ -9,7 +9,8 @@ int main(int argc, char *argv[])
   if (argc < 2){
     printf("Usage: %s YYYY-MM-DD {A|B}\n\n"
 	   "YYYY-MM-DD is date in that format.\n"
-	   "{A|B} AD or BS, automatically assumes conversion to another.\n\n"
+	   "{A|B} AD or BS, automatically assumes conversion to another."
+	   " Defaults to AD.\n\n"
 	   "Pass - as argument if you want current date in BS.\n", argv[0]);
     return 0;
   }
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
     input_date = getCurrentDate();
   }else{
     sscanf(argv[1], "%d-%d-%d", &input_date.year, &input_date.month, &input_date.day);
-    if (argv[2][0] == 'A'){
+    if (argc < 3 || argv[2][0] == 'A'){
       input_date.type = AD;
       convert_to = BS;
     }else if (argv[2][0] == 'B'){
@@ -30,6 +31,11 @@ int main(int argc, char *argv[])
       printf("Wrong Calender system.\n");
       return 1;
     }
+  }
+  
+  if (! validDate(&input_date)){
+    fprintf(stderr, "Sorry the Date is Invalid, cannot perform conversion.\n");
+    return 1;
   }
 
   converted_date = convertADBS(&input_date, convert_to);
