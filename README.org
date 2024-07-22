@@ -19,6 +19,14 @@ Any of the following two is fine.
   gcc -o birthdays bdays.c convertADBS.c
 #+END_SRC
 
+For tests, do ~make test~ and then run the ~./test~ binary. The
+~dates-sorted.txt~ file contains the dates from 2000-2089 BS that will
+be tested. Any mistakes will be printed with dates from test file and
+unmatched converted date along with line number in the test file.
+
+There is ~dates.py~ file that can read the ~dates-sorted.txt~ file for
+some exploratory analysis of the test data.
+
 ** Command Line Arguments 
 The available command line arguments can be seen using -h flag. 
 #+name: help
