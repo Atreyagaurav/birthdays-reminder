@@ -31,6 +31,8 @@ Date nthDayOfEpoch(int n, enum calendar_system to);
 
 Date convertADBS(Date *date,enum calendar_system to);
 
+char* strADBS(enum calendar_system c);
+
 void printDate(Date *d, int year);
 
 Date getCurrentDate();

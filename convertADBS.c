@@ -6,7 +6,7 @@
 // Number of days in each month of English calendar (for non-leap year)
 int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-// Information about number of days in every month since 2000 BS to 2090 BS
+// Information about number of days in every month since 2000 BS to 2089 BS
 const int dataBS[][13] = {
     {30,32,31,32,31,30,30,30,29,30,29,31},
     {31,31,32,31,31,31,30,29,30,29,30,30},
@@ -70,7 +70,7 @@ const int dataBS[][13] = {
     {31,31,32,31,31,31,30,29,30,29,30,30},
     {31,31,32,32,31,30,30,29,30,29,30,30},
     {31,32,31,32,31,30,30,30,29,29,30,31},
-    {30,32,31,32,31,31,29,30,29,30,29,31},
+    {31,31,31,32,31,31,29,30,29,30,29,31},
     {31,31,32,31,31,31,30,29,30,29,30,30},
     {31,31,32,32,31,30,30,29,30,29,30,30},
     {31,32,31,32,31,30,30,30,29,29,30,31},
@@ -89,18 +89,16 @@ const int dataBS[][13] = {
     {31,31,31,32,31,31,30,29,30,29,30,30},
     {31,31,32,31,31,31,30,29,30,29,30,30},
     {31,32,31,32,31,30,30,30,29,29,30,30},
-    {31,31,32,32,31,30,30,30,29,30,30,30},
+    {31,32,31,32,31,30,30,30,29,30,29,31},
     {30,32,31,32,31,30,30,30,29,30,30,30},
     {31,31,32,31,31,30,30,30,29,30,30,30},
     {31,31,32,31,31,30,30,30,29,30,30,30},
     {31,32,31,32,30,31,30,30,29,30,30,30},
     {30,32,31,32,31,30,30,30,29,30,30,30},
-    {31,31,32,31,31,31,30,30,29,30,30,30},
+    {31,31,32,31,31,31,30,30,30,30,30,30},
     {30,31,32,32,30,31,30,30,29,30,30,30},
-    {30,32,31,32,31,30,30,30,29,30,30,30},
     {30,32,31,32,31,30,30,30,29,30,30,30}
 };
-
 
 
 int isLeapYear(int y){
@@ -117,7 +115,7 @@ int validDate(Date* d){
   if (d->type == AD) {
     return d->year > 0 ;
   } else {
-    return d->year > 1999 && d->year <= 2090;
+    return d->year > 1999 && d->year < 2090;
   }
 }
 
@@ -212,6 +210,10 @@ Date nthDayOfADEpoch(int n){
       remDays =0;
     } else {
       d.month++;
+      if (d.month > 12){
+	d.month = 1;
+	d.year++;
+      }
       remDays -= daysInThisMonth;
     }
   }
@@ -252,16 +254,19 @@ Date convertADBS(Date *date,enum calendar_system to) {
 }
 
 
+char* strADBS(enum calendar_system c) {
+  if (c == BS){
+    return "BS";
+  }else{
+    return "AD";
+  }
+}
+
 void printDate(Date *d, int year){
   if (year){
     printf("%d-",d->year);
   }
-  printf("%02d-%02d ",d->month,d->day);
-  if (d->type == BS){
-    printf("BS");
-  }else{
-    printf("AD");
-  }
+  printf("%02d-%02d %s",d->month,d->day, strADBS(d->type));
 }
 
 
