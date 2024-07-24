@@ -4,6 +4,29 @@
 This program simply scans a file with birthdays informations and then displays 
 the list with number before the next birthday.
 
+Extra utility bikram samvat date converter is included. Can be used as
+a tiny utility to show current date in BS as well as convert dates.
+
+Extra utility numerical converter from 0-9 to ०-९ (devanagari numbers)
+is also included. The output from the date converter/current date can
+be piped to this program.
+
+The image below shows the taskbar with the bikram samvat date in maroon color.
+
+[[./screenshot.png]]
+
+This is output using i3status-rust with following config:
+
+#+begin_example
+[[block]]
+block = "custom"
+shell = "sh"
+cycle = ["echo '[BS]'", "adbs-convert -", "adbs-convert - | devnagari-num"]
+format = "$text"
+[block.theme_overrides]
+idle_bg = "#773456"
+#+end_example
+
 ** Compilation
 You can just use the Makefile to compile the files if you are on Linux. 
 Or you can use the gcc command. 
@@ -215,11 +238,11 @@ The program ~convert~ can convert between the dates in the CLI itself. Although 
 
 Here is the usage instructions.
 #+begin_src bash :results output
-./convert
+./adbs-convert
 #+end_src
 
 #+RESULTS[69f14a4dff7461671d5b113957b70d1ebfcbb209]:
-: Usage: ./convert YYYY-MM-DD {A|B}
+: Usage: ./adbs-convert YYYY-MM-DD {A|B}
 : 
 : YYYY-MM-DD is date in that format.
 : {A|B} AD or BS, automatically assumes conversion to another.
@@ -228,7 +251,7 @@ Here is the usage instructions.
 
 So basically:
 #+begin_src bash :results output
-./convert 2022-5-8 AD
+./adbs-convert 2022-5-8 AD
 #+end_src
 
 #+RESULTS[c4a15c393e683f9632922f55b0452c956c317229]:
